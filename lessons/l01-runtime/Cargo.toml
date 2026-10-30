@@ -1,0 +1,27 @@
+[package]
+name = "l01-runtime"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# L01 is bare std + a couple of primitives — no Tokio yet.
+# `pin-project-lite` for safe pin projection inside Join2.
+# `pin-project` is docs-only (feature-gated) — the full crate that pin-project-lite defers to for advanced patterns.
+# `futures` is optional (poll_fn, BoxFuture, etc.); avoid on first pass, pull in only if you can't hand-roll a needed building block.
+pin-project-lite = { workspace = true }
+pin-project      = { workspace = true, optional = true }
+futures          = { workspace = true, optional = true }
+
+[features]
+default = []
+docs = ["dep:pin-project"]              # enable with `cargo doc --all-features` to render pin-project's docs locally
+with-futures-crate = ["dep:futures"]
+
+[[bin]]
+name = "toy-executor"
+path = "src/main.rs"

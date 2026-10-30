@@ -1,0 +1,47 @@
+[workspace]
+resolver = "3"
+members = ["lessons/l01-runtime", "lessons/l02-spawning"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.85"
+publish = false
+license = "MIT OR Apache-2.0"
+authors = ["jcmaxwell"]
+
+[workspace.dependencies]
+tokio = { version = "1", default-features = false }
+tokio-util = "0.7"
+tokio-stream = "0.1"
+futures = "0.3"
+pin-project-lite = "0.2"
+pin-project = "1"                # full crate — docs-only reference (lite version redirects to this for advanced usage)
+anyhow = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+console-subscriber = "0.4"
+clap = { version = "4", features = ["derive"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unreachable_pub = "warn"
+rust_2024_compatibility = { level = "warn", priority = -1 }
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+# Sensible relaxations for lesson code; tighten later if desired.
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+
+[profile.dev]
+opt-level = 1
+debug = "limited"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
+panic = "abort"
